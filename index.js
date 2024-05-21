@@ -25,10 +25,7 @@ connection.connect(
 // GET API end point defination
 
 app.get('/allusers', function (req, res) {
-    connection.connect((error)=>{
-        if(error){
-            console.log(error)
-        }
+    
         var sql= 'select * from users';
         connection.query(sql,(error,result)=>{
             if(error){
@@ -38,17 +35,82 @@ app.get('/allusers', function (req, res) {
             res.send(result)
         })
         
-    })
-}
-);
+})
 
-// POST API end point defination
-app.post('/test-post', function (req, res) {
-    console.log(req.body);
-    return res.json('success');
+app.get('/currentuser', function (req, res) {
+    
+        var sql= 'select * from currentuser';
+        connection.query(sql,(error,result)=>{
+            if(error){
+                console.log(error)
+            }
+            // console.log(res)
+            res.send(result)
+        })
+        
+})
+
+
+app.get('/allusers/:email', function (req, res) {
+    const email= req.params.email;
+    // connection.connect((error)=>{
+    //     if(error){
+    //         console.log(error)
+    //     }
+        var sql= `select * from users where email='${email}'`;
+        connection.query(sql,(error,result)=>{
+            if(error){
+                console.log(error)
+            }
+            // console.log(res)
+            res.send(result)
+        })
+        
+    // })
 });
 
+// POST API end point defination
+// app.post('/test-post', function (req, res) {
+//     console.log(req.body);
+//     return res.json('success');
+// });
+
 // DB
+app.post('/addcurrentuser', function (req, res) {
+    console.log("here-----");
+
+    const user = {
+        email: req.body.email
+    };
+
+    console.log("user", user);
+
+    var sql= `delete from currentuser`;
+        connection.query(sql,(error,result)=>{
+            if(error){
+                console.log(error)
+            }
+            // console.log(res)
+            res.send(result)
+        })
+
+    connection.query(`INSERT INTO currentuser(email) VALUES ('${user.email}');`,
+        function (err, result) {
+            if (err) {
+                console.log("err", err);
+                res.json({
+                    error: err.sqlMessage,
+                })
+            } else {
+                console.log("result", result);
+                res.json({
+                    result: result,
+
+                })
+            }
+        }
+    );
+})
 app.post('/adduser', function (req, res) {
     console.log("here-----");
 
