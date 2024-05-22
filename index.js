@@ -57,18 +57,29 @@ app.get('/allusers/:email', function (req, res) {
     //     if(error){
     //         console.log(error)
     //     }
-        var sql= `select * from users where email='${email}'`;
-        connection.query(sql,(error,result)=>{
-            if(error){
-                console.log(error)
-            }
-            // console.log(res)
-            res.send(result)
-        })
+    var sql= `select * from users where email='${email}'`;
+    connection.query(sql,(error,result)=>{
+        if(error){
+            console.log(error)
+        }
+        // console.log(res)
+        res.send(result)
+    })
         
     // })
 });
 
+app.delete('/deleteuser/:id',(req,res)=>{
+    const id=req.params.id;
+    const sql= `delete from users where id='${id}'`
+    connection.query(sql,(error,result)=>{
+        if(error){
+            console.log(error)
+        }
+        // console.log(res)
+        res.send(result)
+    })
+})
 // POST API end point defination
 // app.post('/test-post', function (req, res) {
 //     console.log(req.body);
@@ -90,7 +101,7 @@ app.post('/addcurrentuser', function (req, res) {
             if(error){
                 console.log(error)
             }
-            // console.log(res)
+            // console.log(result)
             res.send(result)
         })
 
@@ -103,10 +114,10 @@ app.post('/addcurrentuser', function (req, res) {
                 })
             } else {
                 console.log("result", result);
-                res.json({
-                    result: result,
+                // res.json({
+                //     result: result,
 
-                })
+                // })
             }
         }
     );
